@@ -1,7 +1,7 @@
 #Udacity Maps Project
 
 ##Getting Started
-You can access the project live [here](https://kwidmann137.github.io/MapsProject/)
+You can access the project live [here](https://kwidmann137.github.io/MapsProject/dist)
 
 ##How to use
 The map will automatically load with the featured locations visible.
