@@ -1,0 +1,120 @@
+body {
+    padding: 0px;
+    margin: 0px;
+}
+#options-box {
+    height: 100%;
+}
+.map {
+    height: 100%;
+    width: 100%;
+    position: fixed !important;
+    z-index: 0;
+}
+.container {
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+}
+.list {
+    position: fixed;
+    width: 300px;
+    height: 60%;
+    background-color: white;
+    z-index: 1;
+    padding: 15px;
+    overflow: auto;
+}
+#hide-list-btn {
+    float: right;
+}
+#show-list-btn {
+    position: fixed;
+    left: 0%;
+    top: 10%;
+    z-index: 1;
+    width: 45px;
+    background-color: #6D6D6D;
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #6D6D6D;
+    border-radius: 3px;
+}
+.icon-bar {
+    background-color: white;
+    width: 30px;
+    height: 2px;
+    margin: 3px;
+    border: 1px solid white;
+    border-radius: 2px;
+}
+.slide {
+    transform: translate(-300px);
+}
+.hidden {
+    display: none;
+}
+#search-results-ul {
+    max-height: 100%;
+    padding-left: 0px;
+    display: table;
+    margin-top: 10px;
+}
+.search-results-li {
+    display: table-row;
+}
+.search-results-li div {
+    display: table-cell;
+    float: none;
+    vertical-align: middle;
+    padding: 0px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+.search-result-title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.result-img {} .search-result-id {
+    display: none;
+}
+.list-buttons {
+    height: 20%;
+}
+.expanded {
+    animation: forwards;
+    animation-name: expand;
+    animation-duration: 1s;
+}
+.yelpReviewSnippet {
+    font-style: italic;
+}
+.border-bottom {
+    border-bottom: 1px solid #EEEEEE;
+    margin: 5px;
+}
+.see-more {
+    padding-left: 15px;
+    font-size: .8em;
+    color: #0B0080;
+}
+@keyframes expand {
+    from {
+        height: auto;
+    }
+    to {
+        height: 150%;
+    }
+}
+.infoWindowRow {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    max-width: 400px;
+}
+#featured-location-btn,
+#search-btn,
+#clear-btn {
+    width: 80%;
+    margin: 5px;
+    /*background-color: #27B803;*/
+}

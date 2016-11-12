@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+    <!-- set viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0">
+
+    <!-- scripts for bootstrap -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <!-- script for knockout -->
+    <script type='text/javascript' src='bower_components/knockout/dist/knockout.js'></script>
+
+    <!-- scritp for oAuth -->
+    <script type="text/javascript" src="./js/OAuth.min.js"></script>
+    <script type="text/javascript" src="./js/SHA1.min.js"></script>
+
+    <!-- custom styles -->
+    <link rel="stylesheet" type="text/css" href="./css/styles.min.css">
+
+</head>
+
+<body>
+    <div class="container row">
+        <div class="show-list-container">
+            <button id="show-list-btn" data-bind="css: { hidden: !listHidden() }, click: toggleList">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="list col-xs-12" data-bind="css: { slide: listHidden() }">
+            <div class="row">
+                <div class="list-buttons col-xs-12">
+                    <button id="hide-list-btn" class="btn btn-danger btn-md" data-bind="click: toggleList">Hide</button>
+                    <input type="text" name="Search" value="Search..." data-bind="value: searchKeyword" id="search-field">
+                    <button id="featured-location-btn" class="btn btn-primary btn-md" data-bind="click: restoreFeatured">View Featured Locations</button>
+                    <button id="search-btn" class="btn btn-success btn-md" data-bind="click: search">Search Google Maps</button>
+                    <button id="clear-btn" class="btn btn-warning btn-md" data-bind="click: filterList">Filter Current List</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="search-results col-xs-12">
+                    <div data-bind="if: listEmpty">
+                        No Results to Display
+                    </div>
+                    <ul id="search-results-ul" data-bind="foreach: listLocations">
+                        <div data-bind="visible: match, click: $parent.animateMarker">
+                            <div class="search-results-li row" data-bind="attr: {id: id}">
+                                <div class="col-xs-9">
+                                    <p class="search-result-title" data-bind="text: name"></p>
+                                    <p data-bind="text: address"></p>
+                                </div>
+                                <div class="col-xs-3 result-img">
+                                    <img data-bind="attr: {src: photoURL}" class="img-responsive">
+                                </div>
+                            </div>
+                            <div class="row" data-bind="visible: hasYelpDetails()">
+                                <div class="col-xs-12">
+                                    <p class="see-more" data-bind="click: $parent.expandDetails, text: expandDetailsText()"></p>
+                                </div>
+                            </div>
+                            <div class="row yelpDetails" data-bind="if: hasYelpDetails(), visible: expanded()">
+                                <div class="col-xs-6">
+                                    <p>Yelp Rating: <span data-bind="text: yelpRating()"></span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-6">
+                                    <p>Yelp Reviews: <span data-bind="text: yelpNumberOfReviews"></span>
+                                    </p>
+                                </div>
+                                <div class="col-xs-12">
+                                    <a data-bind="attr: {href: yelpURL}">View Yelp Page</a>
+                                </div>
+                                <div class="col-xs-12">
+                                    <p class="yelpReviewSnippet">Review: <span data-bind="text: yelpReviewSnippet"></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="border-bottom"></div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="map" id="map" class=col-xs-9>
+        </div>
+
+    </div>
+    <!-- script to load map, model and yelp js -->
+    <script type="text/javascript" src="./js/map.min.js"></script>
+    <script type="text/javascript" src="./js/model.min.js"></script>
+    <script type="text/javascript" src="./js/yelp.min.js"></script>
+    <!-- load the map api -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAz9-1R2mDUiK3Rc5ybWNX-55wRevbIF5Y&libraries=places&callback=initMap"></script>
+
+</body>
+
+</html>

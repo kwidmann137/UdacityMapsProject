@@ -1,0 +1,15 @@
+{
+  "name": "maps_project",
+  "version": "1.0.0",
+  "description": "Udacity Maps Project",
+  "main": "index.js",
+  "dependencies": {
+    "@zalando/oauth2-client-js": "0.0.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kyle Widmann",
+  "license": "ISC"
+}

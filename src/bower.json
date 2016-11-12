@@ -1,0 +1,21 @@
+{
+  "name": "Maps_Project",
+  "authors": [
+    "Kyle <Kyle.Widmann@gmail.com>"
+  ],
+  "description": "Dependencies for Maps Project",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "knockout": "^3.4.0",
+    "oauth2-client-js": "^0.0.16"
+  }
+}
