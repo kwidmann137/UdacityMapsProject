@@ -7,10 +7,14 @@ var defaultIcon;
 var selectedIcon;
 var largeInfoWindow;
 //html format for the info window
-var infoWindowContent = '<div class="row infoWindowRow"><h3>%name%</h3></div><div class="row infoWindowRow"><p class="col-xs-7">Yelp Review: %yelpReview% </p><img class="col-xs-5 img-responsive" src="%src%"></div>';
+var infoWindowContentWithYelp = '<div class="row infoWindowRow"><h3>%name%</h3></div><div class="row infoWindowRow"><div class="col-xs-7"><p>%address%</p></div><div class="col-xs-5"><div class="row infoWindowRow"><p>Yelp Rating: %yelpRating%</p></div><div class="row infoWindowRow"><p>Yelp Reviews: %numberOfYelpReviews%</p></div><div class="row infoWindowRow"><a href="%yelpUrl%">View Yelp Page</a></div></div></div><div class="row infoWindowRow"><p class="col-xs-7">Yelp Review: %yelpReview% </p><img class="col-xs-5 img-responsive" src="%src%"></div>';
+var infoWindowContentWithoutYelp = '<div class="row infoWindowRow"><h3>%name%</h3></div><div class="row infoWindowRow"><div class="col-xs-7"><p>%address%</p></div><img class="col-xs-5 img-responsive" src="%src%"></div>';
 
 //initializes the map
 function initMap() {
+    if(typeof google !== 'object' && typeof google.maps !== 'object'){
+        alter("There was an error loading the map, try refreshing the page!");
+    }
     window.onload = function() {
         // Create a map object and specify the DOM element for display.
         map = new google.maps.Map(document.getElementById('map'), {
@@ -37,7 +41,7 @@ function initMap() {
         createFeaturedLocation("Mission San Jose Church, San Antonio, TX");
         createFeaturedLocation("The Alamo, San Antonio, TX");
         createFeaturedLocation("Government Canyon, San Antonio, TX");
-    }
+    };
 }
 
 //creates a featured location, sends to yelp for info
@@ -45,7 +49,7 @@ function createFeaturedLocation(locationKeyword) {
     var request = {
         query: locationKeyword,
         bounds: map.getBounds()
-    }
+    };
     var allResults = [];
 
     var service = new google.maps.places.PlacesService(map);
@@ -64,8 +68,10 @@ function createFeaturedLocation(locationKeyword) {
                 });
                 //get yelp info for this result
                 yelpSearch("San Antonio", results[i].name, results[i], marker, "featured");
-                bounds.extend(results[i].geometry.location)
+                bounds.extend(results[i].geometry.location);
             }
+        }else{
+            alert("There was an error creating a featured location.  Please try again.");
         }
         map.fitBounds(bounds);
     }
@@ -76,7 +82,7 @@ function mapSearch(searchKeyword) {
     var request = {
         query: searchKeyword,
         bounds: map.getBounds()
-    }
+    };
     var allResults = [];
 
     var service = new google.maps.places.PlacesService(map);
@@ -95,8 +101,10 @@ function mapSearch(searchKeyword) {
                     icon: defaultIcon,
                 });
                 yelpSearch("San Antonio", results[i].name, results[i], marker, "search");
-                bounds.extend(results[i].geometry.location)
+                bounds.extend(results[i].geometry.location);
             }
+        }else{
+            alert("There was an error searching Google Maps.  Please try again.");
         }
         map.fitBounds(bounds);
     }
@@ -137,33 +145,56 @@ function mapAnimateMarker(marker, type) {
 //populate the info window with marker info when clicked
 function populateInfoWindow(marker, infoWindow, yelpData, result) {
     if (infoWindow.marker != marker) {
-        infoWindow.marker = marker;
-        var formattedInfoWindow = infoWindowContent.replace("%name%", result.name);
-        var photoURL = typeof result.photos !== 'undefined' ?
-            result.photos[0].getUrl({
-                'maxWidth': 150,
-                'maxHeight': 150
-            }) :
-            ''; //alternative a "nophoto.jpg"
-        formattedInfoWindow = formattedInfoWindow.replace("%src%", photoURL);
-        var yelpReview = yelpData !== null ? yelpData.snippet_text : 'Not Available...';
-        formattedInfoWindow = formattedInfoWindow.replace("%yelpReview%", yelpReview);
-        infoWindow.setContent(formattedInfoWindow);
-        infoWindow.open(map, marker);
-        infoWindow.addListener('closeclick', function() {
-            this.marker = null;
-        }, infoWindow);
+        if(yelpData !== null){
+            infoWindow.marker = marker;
+            var formattedInfoWindow = infoWindowContentWithYelp.replace("%name%", result.name);
+            var photoURL = typeof result.photos !== 'undefined' ?
+                result.photos[0].getUrl({
+                    'maxWidth': 150,
+                    'maxHeight': 150
+                }) :
+                ''; //alternative a "nophoto.jpg"
+            formattedInfoWindow = formattedInfoWindow.replace("%src%", photoURL);
+            var yelpReview = yelpData !== null ? yelpData.snippet_text : 'Not Available...';
+            formattedInfoWindow = formattedInfoWindow.replace("%yelpReview%", yelpReview);
+            formattedInfoWindow = formattedInfoWindow.replace("%address%", result.formatted_address);
+            formattedInfoWindow = formattedInfoWindow.replace("%yelpRating%", yelpData.rating);
+            formattedInfoWindow = formattedInfoWindow.replace("%numberOfYelpReviews%", yelpData.review_count);
+            formattedInfoWindow = formattedInfoWindow.replace("%yelpUrl%", yelpData.url);
+            infoWindow.setContent(formattedInfoWindow);
+            infoWindow.open(map, marker);
+            infoWindow.addListener('closeclick', function() {
+                this.marker = null;
+            }, infoWindow);
+        }else{
+            infoWindow.marker = marker;
+            var formattedInfoWindow = infoWindowContentWithoutYelp.replace("%name%", result.name);
+            formattedInfoWindow = formattedInfoWindow.replace("%address%", result.formatted_address);
+            var photoURL = typeof result.photos !== 'undefined' ?
+                result.photos[0].getUrl({
+                    'maxWidth': 150,
+                    'maxHeight': 150
+                }) :
+                ''; //alternative a "nophoto.jpg"
+            formattedInfoWindow = formattedInfoWindow.replace("%src%", photoURL);
+            infoWindow.setContent(formattedInfoWindow);
+            infoWindow.open(map, marker);
+            infoWindow.addListener('closeclick', function() {
+                this.marker = null;
+            }, infoWindow);
+        }
     }
-};
+}
 
 
 //adds a completed featured location to the model
 function mapAddCompletedFeaturedLocation(yelpData, result, marker) {
     //if names don't match dont and addressed don't match, set yelp to null
-    if (yelpData != null && yelpData.name != result.name && result.formatted_address.toLowerCase().search(yelpData.location.address[0].toLowerCase()) < 0) {
+    if (yelpData !== null && yelpData.name != result.name && result.formatted_address.toLowerCase().search(yelpData.location.address[0].toLowerCase()) < 0) {
         yelpData = null;
     }
     marker.addListener('click', function() {
+        mapAnimateMarker(this, "featured");
         populateInfoWindow(this, largeInfoWindow, yelpData, result);
     });
     //add the location to the knockout array
@@ -173,10 +204,11 @@ function mapAddCompletedFeaturedLocation(yelpData, result, marker) {
 //adds a compelted search location to the model
 function mapAddCompletedSearchLocation(yelpData, result, marker) {
     //if names don't match dont and addressed don't match, set yelp to null
-    if (yelpData != null && yelpData.name != result.name && result.formatted_address.toLowerCase().search(yelpData.location.address[0].toLowerCase()) < 0) {
+    if (yelpData !== null && yelpData.name != result.name && result.formatted_address.toLowerCase().search(yelpData.location.address[0].toLowerCase()) < 0) {
         yelpData = null;
     }
     marker.addListener('click', function() {
+        mapAnimateMarker(this, "search");
         populateInfoWindow(this, largeInfoWindow, yelpData, result);
     });
     //if they do match add review to location

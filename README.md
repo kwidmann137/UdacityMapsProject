@@ -1,7 +1,15 @@
 #Udacity Maps Project
 
 ##Getting Started
-You can access the project live [here](https://kwidmann137.github.io/MapsProject/dist)
+####If you want to run the application locally
+* Requirements
+    * You must have all of the files in the "dist" directory of the repository
+    * You can either download the files or clone the repository
+* Running the app
+    * To run the app simply open the index.html file in the "dist" directory with any browser
+
+####If you want to access a live version of the application
+* You can access the project live [here](https://kwidmann137.github.io/MapsProject/dist)
 
 ##How to use
 The map will automatically load with the featured locations visible.

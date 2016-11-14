@@ -50,7 +50,7 @@ function yelpSearch(location, name, result, marker, type) {
         //need to set cache to true to eliminate additional underscore and get a valid yelp result
         'cache': true
     }).done(function(data) {
-        if (data.businesses[0] != null) {
+        if (data.businesses[0] !== null) {
             data = data.businesses[0];
         } else {
             data = null;
@@ -61,7 +61,6 @@ function yelpSearch(location, name, result, marker, type) {
             mapAddCompletedSearchLocation(data, result, marker);
         }
     }).fail(function(XMLHttpRequest, textStats, error) {
-        console.log("Error");
-        console.log(error);
+        alert("There was an error retrieving the Yelp details for " + result.name + ".  Don't worry though, you will still see the location, just without the awesome Yelp reviews.");
     });
 }
