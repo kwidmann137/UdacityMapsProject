@@ -50,7 +50,6 @@ function createFeaturedLocation(locationKeyword) {
         query: locationKeyword,
         bounds: map.getBounds()
     };
-    var allResults = [];
 
     var service = new google.maps.places.PlacesService(map);
     service.textSearch(request, callback);
@@ -83,7 +82,6 @@ function mapSearch(searchKeyword) {
         query: searchKeyword,
         bounds: map.getBounds()
     };
-    var allResults = [];
 
     var service = new google.maps.places.PlacesService(map);
     service.textSearch(request, callback);
@@ -91,7 +89,6 @@ function mapSearch(searchKeyword) {
     function callback(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
             for (var i = 0; i < results.length; i++) {
-
                 var marker = new google.maps.Marker({
                     map: map,
                     position: results[i].geometry.location,
@@ -204,7 +201,7 @@ function mapAddCompletedFeaturedLocation(yelpData, result, marker) {
 //adds a compelted search location to the model
 function mapAddCompletedSearchLocation(yelpData, result, marker) {
     //if names don't match dont and addressed don't match, set yelp to null
-    if (yelpData !== null && yelpData.name != result.name && result.formatted_address.toLowerCase().search(yelpData.location.address[0].toLowerCase()) < 0) {
+    if (yelpData !== null && typeof yelpData !== 'undefined' && yelpData.name != result.name && result.formatted_address.toLowerCase().search(yelpData.location.address[0].toLowerCase()) < 0) {
         yelpData = null;
     }
     marker.addListener('click', function() {

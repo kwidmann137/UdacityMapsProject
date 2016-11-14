@@ -78,6 +78,7 @@ var viewModel = function() {
 
     //filters the current list based on keyword
     self.filterList = function() {
+        // console.log(self.listLocations());
         self.listLocations().forEach(function(loc, i) {
             //set match to false for entire list and only set true for those who match
             loc.match(false);

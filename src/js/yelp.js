@@ -2,6 +2,7 @@
 //once results are achieved they are passed back to maps to verify
 //they match the location and be added to the model
 function yelpSearch(location, name, result, marker, type) {
+    // console.log(result);
     var auth = {
         consumerKey: "9v0dToFOoyuhLJiWJfujRA",
         consumerSecret: "HCtQEDyu5Xq-Axp-1hqbEpkiBSM",
@@ -50,7 +51,7 @@ function yelpSearch(location, name, result, marker, type) {
         //need to set cache to true to eliminate additional underscore and get a valid yelp result
         'cache': true
     }).done(function(data) {
-        if (data.businesses[0] !== null) {
+        if (data.businesses.length > 0 && data.businesses[0] !== null) {
             data = data.businesses[0];
         } else {
             data = null;
