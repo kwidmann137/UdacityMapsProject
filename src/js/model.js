@@ -28,50 +28,47 @@ var viewModel = function() {
 
     //adds a search result from google maps to the list
     self.addSearchResult = function(yelpData, googleResult, marker) {
+        var formattedResult = new location(yelpData, googleResult, marker, "search");
+        self.listLocations.push(formattedResult);
+    };
+
+    //object to store locations info
+    var location = function(yelpData, googleResult, marker, type) {
         var photoURL = typeof googleResult.photos !== 'undefined' ?
             googleResult.photos[0].getUrl({
                 'maxWidth': 150,
                 'maxHeight': 150
             }) :
             ''; //alternative a "nophoto.jpg"
-        var formattedResult = new location(yelpData, googleResult.formatted_address, googleResult.geometry, googleResult.name, photoURL, googleResult.place_id, googleResult.rating, googleResult.types, marker, "search");
-        self.listLocations.push(formattedResult);
-    };
-
-    //object to store locations info
-    var location = function(yelpData, address, location, name, photoURL, id, rating, types, marker, type) {
-        this.address = ko.observable(address);
-        this.location = ko.observable(location);
-        this.name = ko.observable(name);
+        this.googleResult = ko.observable(googleResult);
+        this.address = ko.observable(googleResult.formatted_address);
+        this.location = ko.observable(googleResult.geometry);
+        this.name = ko.observable(googleResult.name);
         this.photoURL = ko.observable(photoURL);
-        this.id = ko.observable(id);
-        this.rating = ko.observable(rating);
-        this.types = ko.observableArray(types);
+        this.id = ko.observable(googleResult.place_id);
+        this.rating = ko.observable(googleResult.rating);
+        this.types = ko.observableArray(googleResult.types);
         this.marker = ko.observable(marker);
         this.match = ko.observable(true);
         this.type = ko.observable(type);
         this.expanded = ko.observable(false);
         this.expandDetailsText = ko.observable("See More Details...");
         if (yelpData !== null) {
+            this.yelpData = ko.observable(yelpData);
             this.hasYelpDetails = ko.observable(true);
             this.yelpNumberOfReviews = ko.observable(yelpData.review_count);
             this.yelpReviewSnippet = ko.observable(yelpData.snippet_text);
             this.yelpURL = ko.observable(yelpData.url);
             this.yelpRating = ko.observable(yelpData.rating);
         } else {
+            this.yelpData = ko.observable(yelpData);
             this.hasYelpDetails = ko.observable(false);
         }
     };
 
     //adds a featured location to the list and to the featured location array
     self.addFeaturedLocation = function(yelpData, googleResult, marker) {
-        var photoURL = typeof googleResult.photos !== 'undefined' ?
-            googleResult.photos[0].getUrl({
-                'maxWidth': 150,
-                'maxHeight': 150
-            }) :
-            ''; //alternative a "nophoto.jpg"
-        var formattedResult = new location(yelpData, googleResult.formatted_address, googleResult.geometry, googleResult.name, photoURL, googleResult.place_id, googleResult.rating, googleResult.types, marker, "featured");
+        var formattedResult = new location(yelpData, googleResult, marker, "featured");
         self.featuredLocations.push(formattedResult);
         self.listLocations.push(formattedResult);
     };
@@ -126,7 +123,9 @@ var viewModel = function() {
 
     //animates the corresponding marker
     self.animateMarker = function() {
+        // console.log(this);
         mapAnimateMarker(this.marker(), this.type());
+        mapOpenInfoWindow(this.googleResult(), this.yelpData(), this.marker());
     };
 
     //expands the list items details if available
@@ -147,6 +146,11 @@ var viewModel = function() {
                 self.listEmpty(false);
             }
         });
+    };
+
+    self.openInfoWindow = function(){
+        console.log();
+
     };
 };
 

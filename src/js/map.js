@@ -10,6 +10,10 @@ var largeInfoWindow;
 var infoWindowContentWithYelp = '<div class="row infoWindowRow"><h3>%name%</h3></div><div class="row infoWindowRow"><div class="col-xs-7"><p>%address%</p></div><div class="col-xs-5"><div class="row infoWindowRow"><p>Yelp Rating: %yelpRating%</p></div><div class="row infoWindowRow"><p>Yelp Reviews: %numberOfYelpReviews%</p></div><div class="row infoWindowRow"><a href="%yelpUrl%">View Yelp Page</a></div></div></div><div class="row infoWindowRow"><p class="col-xs-7">Yelp Review: %yelpReview% </p><img class="col-xs-5 img-responsive" src="%src%"></div>';
 var infoWindowContentWithoutYelp = '<div class="row infoWindowRow"><h3>%name%</h3></div><div class="row infoWindowRow"><div class="col-xs-7"><p>%address%</p></div><img class="col-xs-5 img-responsive" src="%src%"></div>';
 
+function loadError(){
+    alert("Google Maps failed to load.  Please try refreshing the page.");
+}
+
 //initializes the map
 function initMap() {
     if(typeof google !== 'object' && typeof google.maps !== 'object'){
@@ -181,6 +185,10 @@ function populateInfoWindow(marker, infoWindow, yelpData, result) {
             }, infoWindow);
         }
     }
+}
+
+function mapOpenInfoWindow(googleResult, yelpData, marker){
+    populateInfoWindow(marker, largeInfoWindow, yelpData, googleResult);
 }
 
 
